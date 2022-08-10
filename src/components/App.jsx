@@ -20,6 +20,8 @@ export class App extends Component {
     color: '',
   };
 
+  // console.log('object');
+
   componentDidUpdate(prevProp, prevState) {
     if (
       prevState.contacts.length !== this.state.contacts.length ||
