@@ -68,4 +68,5 @@ export const RadioInput = ({ onChangeBtn, radioOptions }) => {
 
 RadioInput.propTypes = {
   onChange: PropTypes.func,
+  radioOptions: PropTypes.array,
 };
