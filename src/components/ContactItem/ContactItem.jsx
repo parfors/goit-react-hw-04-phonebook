@@ -5,39 +5,28 @@ import {
   CheckBoxInput,
 } from 'components';
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useState } from 'react';
 
-export class ContactItem extends Component {
-  state = {
-    agreement: false,
-  };
+export const ContactItem = ({ name, number, onBtnDelete }) => {
+  const [agreement, setAgreement] = useState(false);
 
-  onChangeBox = () => {
-    this.setState({
-      agreement: !this.state.agreement,
-    });
-  };
-
-  render() {
-    const { name, number, onBtnDelete } = this.props;
-    return (
-      <>
-        <ListItem>
-          <ParagraphStyled>Name: {name}</ParagraphStyled>
-          <ParagraphStyled>Number: {number}</ParagraphStyled>
-          <CheckBoxInput onChange={this.onChangeBox} />
-          <ButtonDeleteStyled
-            disabled={!this.state.agreement}
-            onClick={onBtnDelete}
-            type="button"
-          >
-            Delete
-          </ButtonDeleteStyled>
-        </ListItem>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <ListItem>
+        <ParagraphStyled>Name: {name}</ParagraphStyled>
+        <ParagraphStyled>Number: {number}</ParagraphStyled>
+        <CheckBoxInput onChange={() => setAgreement(!agreement)} />
+        <ButtonDeleteStyled
+          disabled={!agreement}
+          onClick={onBtnDelete}
+          type="button"
+        >
+          Delete
+        </ButtonDeleteStyled>
+      </ListItem>
+    </>
+  );
+};
 
 ContactItem.propTypes = {
   name: PropTypes.string,

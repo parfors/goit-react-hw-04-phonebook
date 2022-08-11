@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Form,
   SectionStyled,
@@ -8,90 +8,70 @@ import {
   RadioInput,
 } from 'components';
 
-export class App extends Component {
-  state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    filter: '',
-    color: '',
-  };
+export const App = () => {
+  const [contacts, setContacts] = useState([
+    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+  ]);
+  const [filter, setFilter] = useState('');
+  const [color, setColor] = useState('');
 
-  // console.log('object');
-
-  componentDidUpdate(prevProp, prevState) {
-    if (
-      prevState.contacts.length !== this.state.contacts.length ||
-      prevState.color !== this.state.color
-    ) {
-      localStorage.setItem('contacts', JSON.stringify(this.state));
-    }
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem('contacts'));
     if (localStorageData) {
       const localData = JSON.parse(localStorage.getItem('contacts'));
-      this.setState({
-        contacts: localData.contacts,
-        color: localData.color,
-      });
+      setContacts(localData.contacts);
+      setColor(localData.color);
     }
-  }
+  }, []);
 
-  deleteContact = id => {
-    this.setState(prevState => {
-      return {
-        contacts: prevState.contacts.filter(el => el.id !== id),
-      };
-    });
-  };
+  useEffect(() => {
+    if (color === '') {
+      return;
+    }
+    const Item = { contacts, color };
+    localStorage.setItem('contacts', JSON.stringify(Item));
+  }, [contacts, color]);
 
-  formSubmitHandler = data => {
+  const formSubmitHandler = data => {
     const normalizedData = data.name.toLowerCase();
-    if (
-      this.state.contacts.some(el => el.name.toLowerCase() === normalizedData)
-    ) {
+    if (contacts.some(el => el.name.toLowerCase() === normalizedData)) {
       alert(`${data.name} is already in contacts`);
       return;
     }
-    this.setState(prevState => {
-      return { contacts: [data, ...prevState.contacts] };
-    });
+    setContacts(prevState => [data, ...prevState]);
   };
 
-  filterChangeHandler = event => {
-    this.setState({ filter: event.currentTarget.value });
+  const radioBtnChangeHandler = data => {
+    setColor(data);
   };
 
-  radioBtnChangeHandler = data => {
-    this.setState({ color: data });
-  };
+  const radioOptions = ['green', 'red', 'grey'];
+  const normalizedFilter = filter.toLowerCase();
+  const visibleContacts = contacts.filter(el =>
+    el.name.toLowerCase().includes(normalizedFilter)
+  );
 
-  render() {
-    const { contacts, filter, color } = this.state;
-    const normalizedFilter = filter.toLowerCase();
-    const visibleContacts = contacts.filter(el =>
-      el.name.toLowerCase().includes(normalizedFilter)
-    );
-
-    return (
-      <>
-        <SectionStyled style={{ backgroundColor: color }}>
-          <TitleStyled>Phonebook</TitleStyled>
-          <Form onSubmit={this.formSubmitHandler} />
-          <TitleStyled>Contacts</TitleStyled>
-          <Filter value={filter} onChange={this.filterChangeHandler} />
-          <ContactsList
-            contacts={visibleContacts}
-            onBtnDelete={this.deleteContact}
-          />
-          <RadioInput onChangeBtn={this.radioBtnChangeHandler} />
-        </SectionStyled>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <SectionStyled style={{ backgroundColor: color }}>
+        <TitleStyled>Phonebook</TitleStyled>
+        <Form onSubmit={formSubmitHandler} />
+        <TitleStyled>Contacts</TitleStyled>
+        <Filter value={filter} onChange={e => setFilter(e.target.value)} />
+        <ContactsList
+          contacts={visibleContacts}
+          onBtnDelete={id =>
+            setContacts(prevState => prevState.filter(el => el.id !== id))
+          }
+        />
+        <RadioInput
+          radioOptions={radioOptions}
+          onChangeBtn={radioBtnChangeHandler}
+        />
+      </SectionStyled>
+    </>
+  );
+};

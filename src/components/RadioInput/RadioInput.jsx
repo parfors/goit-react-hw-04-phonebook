@@ -1,66 +1,71 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { InputRadioStyled, LabelRadio } from 'components';
 import PropTypes from 'prop-types';
 
-export class RadioInput extends Component {
-  state = {
-    color: '',
-  };
-  onChange = event => {
-    this.setState({
-      [event.currentTarget.name]: event.currentTarget.value,
-    });
-    this.props.onChangeBtn(event.currentTarget.value);
+export const RadioInput = ({ onChangeBtn, radioOptions }) => {
+  const [color, setColor] = useState('');
+
+  const onChange = e => {
+    setColor(e.target.value);
+    onChangeBtn(e.currentTarget.value);
   };
 
-  componentDidMount() {
+  useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem('contacts'));
     if (localStorageData) {
       const localData = JSON.parse(localStorage.getItem('contacts'));
-      this.setState({
-        color: localData.color,
-      });
+      setColor(localData.color);
     }
-  }
+  }, []);
 
-  static propTypes = {
-    onChange: PropTypes.func,
-  };
+  return (
+    <>
+      {radioOptions.map(el => (
+        <LabelRadio key={el}>
+          <InputRadioStyled
+            name="color"
+            type="radio"
+            checked={color === { el }}
+            onChange={onChange}
+            value={el}
+          />
+          {el}
+        </LabelRadio>
+      ))}
+      {/* <LabelRadio>
+        <InputRadioStyled
+          name="color"
+          type="radio"
+          checked={color === { el }}
+          onChange={onChange}
+          value={el}
+        />
+        {el}{' '}
+      </LabelRadio>
+      <LabelRadio>
+        <InputRadioStyled
+          name="color"
+          type="radio"
+          checked={color === 'red'}
+          onChange={onChange}
+          value="red"
+        />
+        Red
+      </LabelRadio>
+      <LabelRadio>
+        <InputRadioStyled
+          name="color"
+          type="radio"
+          checked={color === 'grey'}
+          onChange={onChange}
+          value="grey"
+        />
+        Grey
+      </LabelRadio> */}
+    </>
+  );
+};
 
-  render() {
-    return (
-      <>
-        <LabelRadio>
-          <InputRadioStyled
-            name="color"
-            type="radio"
-            checked={this.state.color === 'green'}
-            onChange={this.onChange}
-            value="green"
-          />
-          Green
-        </LabelRadio>
-        <LabelRadio>
-          <InputRadioStyled
-            name="color"
-            type="radio"
-            checked={this.state.color === 'red'}
-            onChange={this.onChange}
-            value="red"
-          />
-          Red
-        </LabelRadio>
-        <LabelRadio>
-          <InputRadioStyled
-            name="color"
-            type="radio"
-            checked={this.state.color === 'grey'}
-            onChange={this.onChange}
-            value="grey"
-          />
-          Grey
-        </LabelRadio>
-      </>
-    );
-  }
-}
+RadioInput.propTypes = {
+  onChange: PropTypes.func,
+};

@@ -1,36 +1,31 @@
-import { Component } from 'react';
 import { InputCheckStyled, LabelRadio } from 'components';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-export class CheckBoxInput extends Component {
-  state = {
-    agreement: false,
-  };
-  changeHandler = () => {
-    this.setState(prevState => {
-      return {
-        agreement: !prevState.agreement,
-      };
+export const CheckBoxInput = ({ onChange }) => {
+  const [agreement, setAgreement] = useState(false);
+
+  const changeHandler = () => {
+    setAgreement(prevState => {
+      return !prevState;
     });
-    this.props.onChange();
+    onChange();
   };
 
-  static propTypes = {
-    onChange: PropTypes.func,
-  };
+  return (
+    <>
+      <LabelRadio>
+        <InputCheckStyled
+          onChange={changeHandler}
+          type="checkBox"
+          checked={agreement}
+        />
+        I agree
+      </LabelRadio>
+    </>
+  );
+};
 
-  render() {
-    return (
-      <>
-        <LabelRadio>
-          <InputCheckStyled
-            onChange={this.changeHandler}
-            type="checkBox"
-            checked={this.state.agreement}
-          />
-          I agree
-        </LabelRadio>
-      </>
-    );
-  }
-}
+CheckBoxInput.propTypes = {
+  onChange: PropTypes.func,
+};
