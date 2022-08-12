@@ -5,11 +5,11 @@ import {
   CheckBoxInput,
 } from 'components';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, memo } from 'react';
 
-export const ContactItem = ({ name, number, onBtnDelete }) => {
+const ContactItemTest = ({ name, number, onBtnDelete }) => {
   const [agreement, setAgreement] = useState(false);
-
+  console.log(name);
   return (
     <>
       <ListItem>
@@ -27,6 +27,8 @@ export const ContactItem = ({ name, number, onBtnDelete }) => {
     </>
   );
 };
+
+export const ContactItem = memo(ContactItemTest);
 
 ContactItem.propTypes = {
   name: PropTypes.string,
