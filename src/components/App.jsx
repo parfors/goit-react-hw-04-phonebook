@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Form,
   SectionStyled,
@@ -17,6 +17,7 @@ export const App = () => {
   ]);
   const [filter, setFilter] = useState('');
   const [color, setColor] = useState('');
+  const localRef = useRef(true);
 
   useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem('contacts'));
@@ -28,12 +29,13 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    if (color === '') {
+    if (localRef.current === true) {
+      localRef.current = false;
       return;
     }
     const Item = { contacts, color };
     localStorage.setItem('contacts', JSON.stringify(Item));
-  }, [contacts, color]);
+  }, [contacts, color, localRef]);
 
   const formSubmitHandler = data => {
     const normalizedData = data.name.toLowerCase();
