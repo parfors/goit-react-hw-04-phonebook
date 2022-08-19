@@ -1,7 +1,9 @@
 import { ListStyled, ContactItem } from 'components';
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 
-export const ContactsList = ({ contacts, onBtnDelete }) => {
+const ContactsListTest = ({ contacts, onBtnDelete }) => {
+  console.log(ContactsListTest);
   return (
     <>
       <ListStyled>
@@ -17,6 +19,7 @@ export const ContactsList = ({ contacts, onBtnDelete }) => {
     </>
   );
 };
+export const ContactsList = memo(ContactsListTest);
 
 ContactsList.propTypes = {
   contacts: PropTypes.array,
