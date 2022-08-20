@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { InputRadioStyled, LabelRadio } from 'components';
 import PropTypes from 'prop-types';
+import { useLocalStorage } from 'hooks';
 
 export const RadioInput = ({ onChangeBtn, radioOptions }) => {
   const [color, setColor] = useState('');
+  const { value } = useLocalStorage('contacts', null);
 
   const onChange = e => {
     setColor(e.target.value);
@@ -11,11 +13,11 @@ export const RadioInput = ({ onChangeBtn, radioOptions }) => {
   };
 
   useEffect(() => {
-    const localStorageData = JSON.parse(localStorage.getItem('contacts'));
+    const localStorageData = value;
     if (localStorageData) {
-      const localData = JSON.parse(localStorage.getItem('contacts'));
-      setColor(localData.color);
+      setColor(localStorageData.color);
     }
+    // eslint-disable-next-line
   }, []);
 
   return (

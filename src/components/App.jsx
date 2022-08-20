@@ -7,6 +7,7 @@ import {
   TitleStyled,
   RadioInput,
 } from 'components';
+import { useLocalStorage } from 'hooks';
 
 export const App = () => {
   const [contacts, setContacts] = useState([
@@ -18,14 +19,15 @@ export const App = () => {
   const [filter, setFilter] = useState('');
   const [color, setColor] = useState('');
   const localRef = useRef(true);
+  const { value, setValue } = useLocalStorage('contacts', null);
 
   useEffect(() => {
-    const localStorageData = JSON.parse(localStorage.getItem('contacts'));
+    const localStorageData = value;
     if (localStorageData) {
-      const localData = JSON.parse(localStorage.getItem('contacts'));
-      setContacts(localData.contacts);
-      setColor(localData.color);
+      setContacts(localStorageData.contacts);
+      setColor(localStorageData.color);
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -33,9 +35,9 @@ export const App = () => {
       localRef.current = false;
       return;
     }
-    const Item = { contacts, color };
-    localStorage.setItem('contacts', JSON.stringify(Item));
-  }, [contacts, color, localRef]);
+    const item = { contacts, color };
+    setValue(item);
+  }, [contacts, color, localRef, setValue]);
 
   const formSubmitHandler = data => {
     const normalizedData = data.name.toLowerCase();

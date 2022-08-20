@@ -9,7 +9,6 @@ import { useState, memo } from 'react';
 
 const ContactItemTest = ({ name, number, onBtnDelete }) => {
   const [agreement, setAgreement] = useState(false);
-  console.log(name);
   return (
     <>
       <ListItem>

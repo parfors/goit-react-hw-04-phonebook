@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { memo } from 'react';
 
 const ContactsListTest = ({ contacts, onBtnDelete }) => {
-  console.log(ContactsListTest);
   return (
     <>
       <ListStyled>
