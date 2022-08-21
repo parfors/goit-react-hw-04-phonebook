@@ -1,11 +1,12 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
+import { useLocalStorage } from 'hooks';
 import { FormStyled, LabelStyled, ButtonStyled, InputStyled } from 'components';
 
 export const Form = ({ onSubmit }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [name, setName] = useLocalStorage('name', '');
+  const [number, setNumber] = useLocalStorage('number', '');
 
   const handleChange = e => {
     const inputName = e.target.name;

@@ -5,7 +5,7 @@ import { useLocalStorage } from 'hooks';
 
 export const RadioInput = ({ onChangeBtn, radioOptions }) => {
   const [color, setColor] = useState('');
-  const { value } = useLocalStorage('contacts', null);
+  const [value] = useLocalStorage('contacts', []);
 
   const onChange = e => {
     setColor(e.target.value);

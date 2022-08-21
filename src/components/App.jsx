@@ -19,7 +19,7 @@ export const App = () => {
   const [filter, setFilter] = useState('');
   const [color, setColor] = useState('');
   const localRef = useRef(true);
-  const { value, setValue } = useLocalStorage('contacts', null);
+  const [value, setValue] = useLocalStorage('contacts', []);
 
   useEffect(() => {
     const localStorageData = value;
